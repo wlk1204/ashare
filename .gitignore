@@ -1,0 +1,10 @@
+__pycache__/
+.venv/
+venv/
+.env
+data/*.json
+!data/2026-07-18.json
+!data/.gitkeep
+*.pyc
+.DS_Store
+.pytest_cache/

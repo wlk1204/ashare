@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>A股日复盘 · {{ report.date }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <p class="brand">ASHARE · 日复盘</p>
+      <h1>{{ report.date }}</h1>
+      {% if report.generated_at %}
+      <p class="meta">生成于 {{ report.generated_at[:19].replace('T', ' ') }}</p>
+      {% endif %}
+    </header>
+
+    <section class="block commentary">
+      <h2>盘面点评</h2>
+      <p>{{ report.commentary }}</p>
+    </section>
+
+    {% if report.indices %}
+    <section class="block">
+      <h2>大盘指数</h2>
+      <div class="index-grid">
+        {% for idx in report.indices %}
+        <div class="index-item">
+          <span class="label">{{ idx.name }}</span>
+          <span class="value">{{ "%.2f"|format(idx.close) }}</span>
+          <span class="pct {% if idx.pct > 0 %}up{% elif idx.pct < 0 %}down{% endif %}">
+            {{ "%+.2f"|format(idx.pct) }}%
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    {% if report.breadth %}
+    <section class="block">
+      <h2>涨跌家数</h2>
+      <div class="breadth">
+        <div class="stat up">
+          <span class="num">{{ report.breadth.up }}</span>
+          <span class="lbl">上涨</span>
+        </div>
+        <div class="stat flat">
+          <span class="num">{{ report.breadth.flat }}</span>
+          <span class="lbl">平盘</span>
+        </div>
+        <div class="stat down">
+          <span class="num">{{ report.breadth.down }}</span>
+          <span class="lbl">下跌</span>
+        </div>
+      </div>
+      <p class="meta">
+        涨停约 {{ report.breadth.limit_up or 0 }} · 跌停约 {{ report.breadth.limit_down or 0 }}
+        {% if report.breadth.total %} · 样本 {{ report.breadth.total }}{% endif %}
+      </p>
+    </section>
+    {% endif %}
+
+    {% if report.northbound and report.northbound.net_inflow is not none %}
+    <section class="block">
+      <h2>北向资金</h2>
+      <p class="north {% if report.northbound.net_inflow >= 0 %}up{% else %}down{% endif %}">
+        {% if report.northbound.net_inflow >= 0 %}净流入{% else %}净流出{% endif %}
+        <strong>{{ "%.2f"|format(report.northbound.net_inflow|abs) }}</strong>
+        {{ report.northbound.unit or "亿元" }}
+      </p>
+    </section>
+    {% endif %}
+
+    {% if report.watchlist %}
+    <section class="block">
+      <h2>自选股</h2>
+      <ul class="stock-list">
+        {% for s in report.watchlist %}
+        <li>
+          <div class="left">
+            <span class="name">{{ s.name }}</span>
+            <span class="code">{{ s.code }}</span>
+          </div>
+          <div class="right">
+            {% if s.close is not none %}
+            <span class="price">{{ "%.2f"|format(s.close) }}</span>
+            <span class="pct {% if s.pct > 0 %}up{% elif s.pct < 0 %}down{% endif %}">
+              {{ "%+.2f"|format(s.pct) }}%
+            </span>
+            {% else %}
+            <span class="meta">暂无</span>
+            {% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    {% if report.sectors and (report.sectors.gainers or report.sectors.losers) %}
+    <section class="block">
+      <h2>板块涨跌</h2>
+      <div class="sector-cols">
+        <div>
+          <h3 class="up">涨幅榜</h3>
+          <ul class="rank-list">
+            {% for s in report.sectors.gainers %}
+            <li>
+              <span>{{ s.name }}</span>
+              <span class="pct up">{{ "%+.2f"|format(s.pct) }}%</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div>
+          <h3 class="down">跌幅榜</h3>
+          <ul class="rank-list">
+            {% for s in report.sectors.losers %}
+            <li>
+              <span>{{ s.name }}</span>
+              <span class="pct down">{{ "%+.2f"|format(s.pct) }}%</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    {% if report.hot and (report.hot.amount or report.hot.turnover) %}
+    <section class="block">
+      <h2>成交热点</h2>
+      <h3>成交额前列</h3>
+      <ul class="rank-list">
+        {% for s in report.hot.amount %}
+        <li>
+          <span>{{ s.name }} <small>{{ s.code }}</small></span>
+          <span class="meta">{{ "%.1f"|format(s.amount) }}亿 · <span class="pct {% if s.pct > 0 %}up{% elif s.pct < 0 %}down{% endif %}">{{ "%+.2f"|format(s.pct) }}%</span></span>
+        </li>
+        {% endfor %}
+      </ul>
+      <h3>换手率前列</h3>
+      <ul class="rank-list">
+        {% for s in report.hot.turnover %}
+        <li>
+          <span>{{ s.name }} <small>{{ s.code }}</small></span>
+          <span class="meta">换手 {{ "%.1f"|format(s.turnover) }}% · <span class="pct {% if s.pct > 0 %}up{% elif s.pct < 0 %}down{% endif %}">{{ "%+.2f"|format(s.pct) }}%</span></span>
+        </li>
+        {% endfor %}
+      </ul>
+    </section>
+    {% endif %}
+
+    {% if history %}
+    <section class="block history">
+      <h2>历史复盘</h2>
+      <div class="chips">
+        {% for d in history[:14] %}
+        <a href="/review/{{ d }}" {% if d == report.date %}class="active"{% endif %}>{{ d[5:] }}</a>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    <footer class="footer">
+      <p>数据仅供参考，不构成投资建议</p>
+    </footer>
+  </div>
+</body>
+</html>

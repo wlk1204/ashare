@@ -1,0 +1,67 @@
+{
+  "date": "2026-07-18",
+  "generated_at": "2026-07-18T15:40:00+08:00",
+  "is_trading_day": true,
+  "commentary": "上证收涨 0.82%，风险偏好回暖。涨跌比 3210:1780，赚钱效应较好。涨停约 68 家。北向资金净流入 42.56 亿元。强势板块：半导体、军工、有色金属。拖累板块：白酒、银行。自选方面，宁德时代 +3.21%，贵州茅台 -0.45%。",
+  "indices": [
+    {"name": "上证指数", "close": 3512.48, "change": 28.56, "pct": 0.82},
+    {"name": "深证成指", "close": 11205.33, "change": 126.4, "pct": 1.14},
+    {"name": "创业板指", "close": 2288.16, "change": 35.2, "pct": 1.56}
+  ],
+  "breadth": {
+    "up": 3210,
+    "down": 1780,
+    "flat": 210,
+    "limit_up": 68,
+    "limit_down": 12,
+    "total": 5200
+  },
+  "northbound": {
+    "date": "2026-07-18",
+    "net_inflow": 42.56,
+    "unit": "亿元"
+  },
+  "watchlist": [
+    {"code": "600519", "name": "贵州茅台", "close": 1488.0, "pct": -0.45, "change": -6.7, "amount": 48.2, "turnover": 0.18},
+    {"code": "000858", "name": "五粮液", "close": 132.5, "pct": 0.62, "change": 0.82, "amount": 22.1, "turnover": 0.85},
+    {"code": "300750", "name": "宁德时代", "close": 198.6, "pct": 3.21, "change": 6.18, "amount": 96.4, "turnover": 1.42}
+  ],
+  "sectors": {
+    "gainers": [
+      {"name": "半导体", "pct": 3.85, "leader": "中芯国际"},
+      {"name": "军工", "pct": 2.94, "leader": "中航沈飞"},
+      {"name": "有色金属", "pct": 2.41, "leader": "紫金矿业"},
+      {"name": "新能源车", "pct": 2.12, "leader": "比亚迪"},
+      {"name": "软件开发", "pct": 1.88, "leader": "恒生电子"},
+      {"name": "光伏设备", "pct": 1.65, "leader": "隆基绿能"},
+      {"name": "通信设备", "pct": 1.42, "leader": "中兴通讯"},
+      {"name": "小金属", "pct": 1.21, "leader": "华友钴业"}
+    ],
+    "losers": [
+      {"name": "白酒", "pct": -1.82, "leader": "贵州茅台"},
+      {"name": "银行", "pct": -1.15, "leader": "招商银行"},
+      {"name": "保险", "pct": -0.96, "leader": "中国平安"},
+      {"name": "房地产", "pct": -0.88, "leader": "万科A"},
+      {"name": "煤炭", "pct": -0.74, "leader": "中国神华"},
+      {"name": "石油石化", "pct": -0.61, "leader": "中国石油"},
+      {"name": "高速公路", "pct": -0.45, "leader": "宁沪高速"},
+      {"name": "电力", "pct": -0.32, "leader": "长江电力"}
+    ]
+  },
+  "hot": {
+    "amount": [
+      {"code": "300750", "name": "宁德时代", "pct": 3.21, "amount": 96.4, "turnover": 1.42},
+      {"code": "601012", "name": "隆基绿能", "pct": 2.05, "amount": 72.3, "turnover": 2.1},
+      {"code": "002594", "name": "比亚迪", "pct": 1.88, "amount": 68.9, "turnover": 1.05},
+      {"code": "688981", "name": "中芯国际", "pct": 5.12, "amount": 55.4, "turnover": 3.2},
+      {"code": "600519", "name": "贵州茅台", "pct": -0.45, "amount": 48.2, "turnover": 0.18}
+    ],
+    "turnover": [
+      {"code": "688981", "name": "中芯国际", "pct": 5.12, "amount": 55.4, "turnover": 3.2},
+      {"code": "002230", "name": "科大讯飞", "pct": 4.2, "amount": 41.0, "turnover": 2.85},
+      {"code": "601012", "name": "隆基绿能", "pct": 2.05, "amount": 72.3, "turnover": 2.1},
+      {"code": "300750", "name": "宁德时代", "pct": 3.21, "amount": 96.4, "turnover": 1.42},
+      {"code": "000063", "name": "中兴通讯", "pct": 1.55, "amount": 38.6, "turnover": 1.38}
+    ]
+  }
+}
