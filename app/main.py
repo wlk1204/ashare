@@ -3,13 +3,14 @@ from __future__ import annotations
 import logging
 from contextlib import asynccontextmanager
 from datetime import date, datetime
+from pathlib import Path
 from typing import Any, Optional
 from zoneinfo import ZoneInfo
 
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 from fastapi import FastAPI, HTTPException, Query, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -17,6 +18,8 @@ from app.config import get_settings
 from app.data_fetcher import is_trading_day
 from app.report import generate_report, list_report_dates, load_report
 from app.wechat import WeChatError, push_daily_report
+
+PUBLIC_DIR = Path(__file__).resolve().parent.parent / "public"
 
 
 def _latest_or_generate(day: date) -> dict[str, Any]:
@@ -166,3 +169,15 @@ async def api_push(day: Optional[str] = None):
 @app.get("/health")
 async def health():
     return {"ok": True}
+
+
+@app.get("/{filename}.txt")
+async def public_txt(filename: str):
+    """站点根路径下的 .txt 验证文件（如域名归属校验）。"""
+    # 仅允许纯文件名，防止路径穿越
+    if "/" in filename or "\\" in filename or ".." in filename:
+        raise HTTPException(status_code=404, detail="Not Found")
+    path = (PUBLIC_DIR / f"{filename}.txt").resolve()
+    if not str(path).startswith(str(PUBLIC_DIR.resolve())) or not path.is_file():
+        raise HTTPException(status_code=404, detail="Not Found")
+    return FileResponse(path, media_type="text/plain; charset=utf-8")
